@@ -46,6 +46,7 @@ venv.bak/
 # SLS data files
 *.txt
 *.sls
+!requirements.txt
 
 # PDOC documentation
 html/
