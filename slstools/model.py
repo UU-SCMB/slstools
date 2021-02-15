@@ -6,11 +6,26 @@ class Model:
     """Helper class to create a model for scattering spheres of given diameter
     (and polydispersity).
 
+    ## Example usage
+    ```python
+    import matplotlib.pyplot as plt
+    from slstools import Model
+    
+    # intialise class with spheres of 1200 nm in diameter
+    # with a polydispersity of 5%
+    exp = Model(d=1200.,pd=5.,n_p=1.4345)
+    plt.plot(exp.K, exp.intensity)
+    plt.xlabel(r"K ($%s^{-1}$)" % exp.K_unit)
+    plt.ylabel("Normalised intensity")
+    plt.yscale("log")
+    plt.show()
+    ```
+
     Attributes
     ----------
-    K : np.ndarray
+    K : numpy.ndarray
         Numpy array containing the scattering angles in units of `K_unit`.
-    intensity : np.ndarray
+    intensity : numpy.ndarray
         Numpy array containing scattering intensities for each angle
         (perpendicular polarisation).
     """
@@ -19,10 +34,10 @@ class Model:
         self,
         n_p,
         d=1000.0,
+        pd=0.0,
         n_m=1.333,
         wavelength=632.8,
-        theta=np.arange(0.0, 181.0, 0.5),
-        pd=0.0,
+        theta=np.linspace(0.0, 180.0, 361),
         K_unit="m",
         normalise=True,
     ):
@@ -35,17 +50,17 @@ class Model:
             (complex) refractive index of the particle.
         d : float, optional
             Diameter of the particle in `nm`, by default `1000.0`.
+        pd : float, optional
+            Polydispersity of the system in % (e.g. `5` for 5% p.d.),
+            by default `0.0`.
         n_m : float, optional
             Refractive index of the medium, by default `1.333` (water).
         wavelength : float, optional
             Vacuum wavelength of the laser in `nm`,
             by default 632.8 (HeNe laser).
-        theta : np.ndarray, optional
+        theta : numpy.ndarray, optional
             List of angles to calculate intensities for,
-            by default `np.arange(0.0,181.0,.5)`
-        pd : float, optional
-            Polydispersity of the system in % (e.g. `5` for 5% p.d.),
-            by default `0.0`.
+            by default `np.linspace(0.0, 180.0, 361)`
         K_unit : str, optional
             (inverse) unit of scattering angle K, by default `m`.
         normalise : bool, optional
@@ -118,7 +133,7 @@ class Model:
 
         Returns
         -------
-        np.ndarray
+        numpy.ndarray
             Numpy array containing the scattering intensities (normalised for
             scattering volume, perpendicular polarisation).
         """

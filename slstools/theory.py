@@ -7,18 +7,18 @@ class Miescat:
 
     Attributes
     ----------
-    data : np.ndarray
+    data : numpy.ndarray
         Numpy array containing all raw data from the file.
-    theta : np.ndarray
+    theta : numpy.ndarray
         Numpy array containing the scattering angles in degrees.
-    K : np.ndarray
+    K : numpy.ndarray
         Numpy array containing the scattering angles (in units of `K_unit`).
     K_unit : str
         (inverse) unit of K, one of [`nm`, `µm`, `m`].
-    intensity : np.ndarray
+    intensity : numpy.ndarray
         Numpy array containing (normalised) scattering intensities
          (perpendicular polarised)
-    intensity_par : np.ndarray
+    intensity_par : numpy.ndarray
         Numpy array containing (normalised) scattering intensities (parallel
         polarised)
     """

@@ -7,21 +7,21 @@ class Experiment:
 
     Attributes
     ----------
-    data : np.ndarray
+    data : numpy.ndarray
         Numpy array containing all raw data from the file.
-    theta : np.ndarray
+    theta : numpy.ndarray
         Numpy array containing the scattering angles in degrees.
-    intensity_uncor : np.ndarray
+    intensity_uncor : numpy.ndarray
         Numpy array containing scattering intensities, not corrected for
         scattering volume (perpendicular polarisation).
-    intensity : np.ndarray
+    intensity : numpy.ndarray
         Numpy array containing scattering intensities, corrected for scattering
         volume (perpendicular polarisation).
-    K : np.ndarray
+    K : numpy.ndarray
         Numpy array containing the scattering angles (in units of `K_unit`).
     K_unit : str
         (inverse) unit of K, one of [`nm`, `µm`, `m`].
-    temperature : np.ndarray
+    temperature : numpy.ndarray
         Numpy array containing temperatures that were measured by the setup.
     """
 
