@@ -11,12 +11,14 @@ Author: Roy Hoitink <L.D.Hoitink@uu.nl>
 from .experiment import Experiment
 from .theory import Miescat
 from .model import Model
+from .fit import Fit
 
-__all__ = ["Experiment", "Miescat", "Model"]
+__all__ = ["Experiment", "Fit", "Model", "Miescat"]
 
 # Do not build separate pages for submodules
 __pdoc__ = {
     'experiment' : False,
+    'fit': False,
     'theory' : False,
     'model' : False,
 }

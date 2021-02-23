@@ -25,7 +25,7 @@ class Experiment:
         Numpy array containing temperatures that were measured by the setup.
     """
 
-    def __init__(self, filename, normalise=True, K_unit="m", **kwargs):
+    def __init__(self, filename, normalise=True, K_unit="m", remove_data_after_pole=True, **kwargs):
         """Initialisation of the class, assigns the data as class variables.
 
         Parameters
@@ -50,6 +50,10 @@ class Experiment:
 
         # cols=['theta', 'I', 'Icor', 'K', 'T'])
         self.data = np.genfromtxt(filename, delimiter=",", skip_header=3, **kwargs).T
+        self.remove_data_after_pole = remove_data_after_pole
+
+        if self.remove_data_after_pole:
+            self.data = self.data[:,(self.data[0]<127.) | (self.data[0] > 131.)]
         self.theta = self.data[0]
         # not corrected for scattering volume
         self.intensity_uncor = self.data[1]
@@ -69,3 +73,30 @@ class Experiment:
             self.K /= 1e6
 
         self.temperature = self.data[4]
+
+    def recalculate_K(self, n_m=1.333, wavelength=632.8):
+        """Recalculate the `K` attribute of the instance, 
+        using the new medium refractive index and laser
+        wavelength
+
+        Parameters
+        ----------
+        n_m : `float` or `complex`, optional
+            Refractive index of the medium, by default 1.333.
+        wavelength : `float`, optional
+            Vacuum wavelength of the laser in `nm`, by default 632.8.
+        """
+        self.K = (
+            4
+            * np.pi
+            * n_m
+            / (wavelength * 1e-9)
+            * np.sin(self.theta / 2.0 * np.pi / 180)
+        )
+
+        if self.K_unit == "nm":
+            self.K /= 1e9
+        elif self.K_unit == "um" or self.K_unit == "µm":
+            self.K_unit = "µm"
+            self.K /= 1e6
+            

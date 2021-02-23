@@ -13,8 +13,8 @@ class Model:
     
     # intialise class with spheres of 1200 nm in diameter
     # with a polydispersity of 5%
-    exp = Model(d=1200.,pd=5.,n_p=1.4345)
-    plt.plot(exp.K, exp.intensity)
+    model = Model(d=1200.,pd=5.,n_p=1.4345)
+    plt.plot(model.K, model.intensity)
     plt.xlabel(r"K ($%s^{-1}$)" % exp.K_unit)
     plt.ylabel("Normalised intensity")
     plt.yscale("log")
@@ -37,7 +37,7 @@ class Model:
         pd=0.0,
         n_m=1.333,
         wavelength=632.8,
-        theta=np.linspace(0.0, 180.0, 361),
+        theta=None,
         K_unit="m",
         normalise=True,
     ):
@@ -78,11 +78,15 @@ class Model:
         self.lambda0 = wavelength
         self.lambdam = wavelength / self.n_medium
 
-        self.theta = theta
-        if type(self.theta) is not np.ndarray:
-            self.theta = np.array(self.theta)
+        if not theta:
+            self.theta = np.linspace(0.0, 180.0, 361)
+        else:
+            self.theta = theta
+            if type(self.theta) is not np.ndarray:
+                self.theta = np.array(self.theta)
 
         self.diameter = d
+        self.polydispersity = pd
 
         self.K = (
             4
@@ -99,7 +103,7 @@ class Model:
             self.K_unit = "µm"
             self.K /= 1e6
 
-        if pd > 0.0:
+        if self.polydispersity > 0.0:
             # created gaussian distribution with given polydispersity
 
             self.intensity = np.zeros(self.theta.shape)
@@ -142,6 +146,8 @@ class Model:
         mu = np.cos(self.theta * np.pi / 180.0)
         size_param = 2 * np.pi / self.lambdam * diameter / 2
         geometric_cross_section = np.pi * (diameter * 1e-9 / 2.0) ** 2
+
+        # geometric_cross_section = np.pi * diameter**2/4 * 1e4  # cm**2
 
         qext, qsca, *_ = mp.ez_mie(
             self.n_particle, diameter, self.lambda0, self.n_medium
