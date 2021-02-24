@@ -78,7 +78,7 @@ class Model:
         self.lambda0 = wavelength
         self.lambdam = wavelength / self.n_medium
 
-        if not theta:
+        if theta is None:
             self.theta = np.linspace(0.0, 180.0, 361)
         else:
             self.theta = theta

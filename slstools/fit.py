@@ -81,12 +81,12 @@ class Fit:
             List of ratios of model_intensity/experiment_intensity as measure
             of the quality of the fit.
         """
-        params = dict(zip(['prefactor','d','pd'], fit_params))
+        params = dict(zip(['prefactor','diameter','polydispersity'], fit_params))
         
         if self.debug:
             print(params)
         
-        self.model = Model(d=params['d'], pd=params['pd'], **self.model_kwargs)
+        self.model = Model(d=params['diameter'], pd=params['polydispersity'], **self.model_kwargs)
         model_ints = params['prefactor']*self.model.intensity[np.isin(self.model.theta, self.exp_theta_vals)]
         
         return 1.0-(model_ints/self.exp_int_vals)
@@ -115,7 +115,7 @@ class Fit:
         self.fitter = least_squares(self._fit_function, start_params, bounds=[(.0001,200.,.1),(1000.,2500.,20.)],\
             x_scale=(1.0e-3, 1.0, 1.0e-2), xtol=1e-3)
 
-        self.optimal_params = self.fitter.x
-        self.optimal_model = Model(d=self.optimal_params[1], pd=self.optimal_params[2], **self.model_kwargs)
+        self.parameters = dict(zip(["prefactor", "diameter", "polydispersity"],self.fitter.x))
+        self.optimal_model = Model(d=self.parameters["diameter"], pd=self.parameters["polydispersity"], **self.model_kwargs)
 
         return self.optimal_model
