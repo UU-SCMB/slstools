@@ -16,7 +16,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install pdoc3
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        python -m pip install -e .
     - name: Build docs with pdoc
       run: |
         # build docs to html/slstools dir
