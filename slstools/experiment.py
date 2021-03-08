@@ -53,7 +53,7 @@ class Experiment:
         self.remove_data_after_pole = remove_data_after_pole
 
         if self.remove_data_after_pole:
-            self.data = self.data[:,(self.data[0]<127.) | (self.data[0] > 131.)]
+            self.data = self.data[:,(self.data[0]<126.) | (self.data[0] > 131.)]
         self.theta = self.data[0]
         # not corrected for scattering volume
         self.intensity_uncor = self.data[1]
@@ -100,3 +100,43 @@ class Experiment:
             self.K_unit = "µm"
             self.K /= 1e6
             
+    def correct_for_reflection(self, n_p=1.4345, n_glass=1.49):
+        """Correct the intensity for reflection
+
+        Stores the corrected intensity as `intensity` atrribute of the class,
+        to allow for easier fitting. The old intensities are now stored in the
+        `intensity_reflection_uncor` attribute.
+
+        Due to reflections, we need to correct the measured intensity for 
+        reflection at the glass-air interface of the toluene vessel as follows:
+
+        $$I_{cor}(\theta) = I_m(\theta)-R I_m(\pi - \theta)$$
+
+        with 
+        * $I_m(\theta)$ the measured intensity at a certain angle $\theta$
+        * $R = \left( \frac{n_{glass} - n_{air}}{n_{glass}+ n_{air}} \right)^2
+        +\left( \frac{n_{glass} - n_{solvent}}{n_{glass}+ n_{solvent}} \right)
+        ^2$ ($n_{air} = 1.00, n_{glass}=1.49, n_{solvent}=$ refractive index of
+         the used solvent)
+
+        Parameters
+        ----------
+        n_p : `float`, optional
+            Refractive index of the particles, by default 1.4345 (n-hexadecane).
+        n_glass : `float`, optional
+            Refractive index of the glass, by default 1.49.
+        """
+        R = ((n_glass-1.)/(n_glass+1.))**2+((n_glass-n_p)/(n_glass+n_p))**2
+
+        refl_theta = 180.-self.theta
+        self.reflection_intensity = np.array([
+                self.intensity[self.theta == t][0] 
+                if t in self.theta else 0. 
+                for t in refl_theta
+            ]) 
+        # find intensities of theta=refl_theta, else set to 0.
+
+        self.intensity_reflection_uncor = self.intensity
+        self.intensity = self.intensity_reflection_uncor - R*self.reflection_intensity
+
+

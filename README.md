@@ -34,6 +34,9 @@ import matplotlib.pyplot as plt
 # load the experiment that is saved in the file 'Sample01.sls'
 experiment = Experiment("Sample01.sls", K_unit="nm")
 
+# correct the experimental data for scattered reflection, optional
+experiment.correct_for_reflection()
+
 # Create an initial model of 1000nm (diameter) spheres with a polydispersity of 5%
 # Refractive index medium: 1.333 (water) and particle: 1.4345 (n-hexadecane)
 # Make sure the given diameter rougly matches the expected diameter, as this will improve the fitting (and its speed)

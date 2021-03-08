@@ -39,7 +39,7 @@ class Fit:
             `None`.
         """
 
-        if type(experiment) not in [str, Experiment]:
+        if not isinstance(experiment, (str, Experiment)):
             raise ValueError("Experiment should be either a string (filename) or Experiment class")
 
         if type(experiment) == str:
@@ -113,7 +113,7 @@ class Fit:
         start_params = [1.0, self.d0, self.pd0]
 
         self.fitter = least_squares(self._fit_function, start_params, bounds=[(.0001,200.,.1),(1000.,2500.,20.)],\
-            x_scale=(1.0e-3, 1.0, 1.0e-2), xtol=1e-3)
+            x_scale=(1.0e-3, 1.0, 1.0e-2), xtol=5e-4)
 
         self.parameters = dict(zip(["prefactor", "diameter", "polydispersity"],self.fitter.x))
         self.optimal_model = Model(d=self.parameters["diameter"], pd=self.parameters["polydispersity"], **self.model_kwargs)
