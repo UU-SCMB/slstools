@@ -125,7 +125,7 @@ class Experiment:
         n_glass : `float`, optional
             Refractive index of the glass, by default 1.49.
         """
-        R = ((n_glass-1.)/(n_glass+1.))**2+((n_glass-n_p)/(n_glass+n_p))**2
+        R = ((n_glass-1.)/(n_glass+1.))**2+((n_glass-n_m)/(n_glass+n_m))**2
 
         refl_theta = 180.-self.theta
         self.reflection_intensity = np.array([
