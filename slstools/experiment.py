@@ -100,7 +100,7 @@ class Experiment:
             self.K_unit = "µm"
             self.K /= 1e6
             
-    def correct_for_reflection(self, n_p=1.4345, n_glass=1.49):
+    def correct_for_reflection(self, n_m=1.333, n_glass=1.49):
         """Correct the intensity for reflection
 
         Stores the corrected intensity as `intensity` atrribute of the class,
@@ -110,19 +110,18 @@ class Experiment:
         Due to reflections, we need to correct the measured intensity for 
         reflection at the glass-air interface of the toluene vessel as follows:
 
-        $$I_{cor}(\theta) = I_m(\theta)-R I_m(\pi - \theta)$$
+        $$I_{cor}(\\theta) = I_m(\\theta)-R*I_m(\\pi - \\theta)$$
 
         with 
-        * $I_m(\theta)$ the measured intensity at a certain angle $\theta$
-        * $R = \left( \frac{n_{glass} - n_{air}}{n_{glass}+ n_{air}} \right)^2
-        +\left( \frac{n_{glass} - n_{solvent}}{n_{glass}+ n_{solvent}} \right)
-        ^2$ ($n_{air} = 1.00, n_{glass}=1.49, n_{solvent}=$ refractive index of
-         the used solvent)
+        
+        * \\(I_m(\\theta)\\) the measured intensity at a certain angle \\(\\theta\\) 
+        * \\(R = \\left( \\frac{n_{glass} - n_{air}}{n_{glass}+ n_{air}} \\right)^2 +\\left( \\frac{n_{glass} - n_{solvent}}{n_{glass}+ n_{solvent}} \\right)^2\\) 
+        * \\( n_{air} = 1.00\\), \\(n_{glass}=\\) `n_glass` , \\(n_{solvent}= \\) `n_m`
 
         Parameters
         ----------
-        n_p : `float`, optional
-            Refractive index of the particles, by default 1.4345 (n-hexadecane).
+        n_m : `float`, optional
+            Refractive index of the medium, by default 1.333 (water).
         n_glass : `float`, optional
             Refractive index of the glass, by default 1.49.
         """

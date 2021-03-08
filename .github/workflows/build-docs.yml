@@ -20,7 +20,7 @@ jobs:
     - name: Build docs with pdoc
       run: |
         # build docs to html/slstools dir
-        pdoc --html --config show_source_code=False slstools
+        pdoc --html --config show_source_code=False --config latex_math=True slstools
     - name: Deploy to GitHub Pages
       if: success()
       uses: crazy-max/ghaction-github-pages@v2
