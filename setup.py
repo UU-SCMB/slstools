@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="slstools",
-    version="0.1.0",
+    version="0.1.1",
     author="Roy Hoitink",
     author_email="L.D.Hoitink@uu.nl",
     license='GNU General Public License v3.0',
