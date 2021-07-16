@@ -10,7 +10,7 @@ setup(
     packages=find_packages(include=["slstools", "slstools.*"]),
     install_requires=[
         "numpy>=1.19.0",
-        "miepython>=1.3.2",
+        "miepython>=2.0.0",
         "scipy>=1.6.0",
     ],
 )
