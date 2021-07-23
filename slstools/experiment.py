@@ -1,5 +1,6 @@
 import numpy as np
 import os
+from pathlib import Path
 
 
 class Experiment:
@@ -7,6 +8,8 @@ class Experiment:
 
     Attributes
     ----------
+    filepath : pathlib.Path
+        Path object of the file containing the SLS data
     data : numpy.ndarray
         Numpy array containing all raw data from the file.
     theta : numpy.ndarray
@@ -25,7 +28,14 @@ class Experiment:
         Numpy array containing temperatures that were measured by the setup.
     """
 
-    def __init__(self, filename, normalise=True, K_unit="m", remove_data_after_pole=True, **kwargs):
+    def __init__(
+        self,
+        filename,
+        normalise=True,
+        K_unit="m",
+        remove_data_after_pole=True,
+        **kwargs,
+    ):
         """Initialisation of the class, assigns the data as class variables.
 
         Parameters
@@ -48,12 +58,14 @@ class Experiment:
                 f"The unit of K should be m, nm or µm. The given value '{K_unit}' is not allowed."
             )
 
+        self.filepath = Path(filename)
+
         # cols=['theta', 'I', 'Icor', 'K', 'T'])
         self.data = np.genfromtxt(filename, delimiter=",", skip_header=3, **kwargs).T
         self.remove_data_after_pole = remove_data_after_pole
 
         if self.remove_data_after_pole:
-            self.data = self.data[:,(self.data[0]<126.) | (self.data[0] > 131.)]
+            self.data = self.data[:, (self.data[0] < 126.0) | (self.data[0] > 131.0)]
         self.theta = self.data[0]
         # not corrected for scattering volume
         self.intensity_uncor = self.data[1]
@@ -75,7 +87,7 @@ class Experiment:
         self.temperature = self.data[4]
 
     def recalculate_K(self, n_m=1.333, wavelength=632.8):
-        """Recalculate the `K` attribute of the instance, 
+        """Recalculate the `K` attribute of the instance,
         using the new medium refractive index and laser
         wavelength
 
@@ -99,7 +111,7 @@ class Experiment:
         elif self.K_unit == "um" or self.K_unit == "µm":
             self.K_unit = "µm"
             self.K /= 1e6
-            
+
     def correct_for_reflection(self, n_m=1.333, n_glass=1.49):
         """Correct the intensity for reflection
 
@@ -107,15 +119,15 @@ class Experiment:
         to allow for easier fitting. The old intensities are now stored in the
         `intensity_reflection_uncor` attribute.
 
-        Due to reflections, we need to correct the measured intensity for 
+        Due to reflections, we need to correct the measured intensity for
         reflection at the glass-air interface of the toluene vessel as follows:
 
         $$I_{cor}(\\theta) = I_m(\\theta)-R*I_m(\\pi - \\theta)$$
 
-        with 
-        
-        * \\(I_m(\\theta)\\) the measured intensity at a certain angle \\(\\theta\\) 
-        * \\(R = \\left( \\frac{n_{glass} - n_{air}}{n_{glass}+ n_{air}} \\right)^2 +\\left( \\frac{n_{glass} - n_{solvent}}{n_{glass}+ n_{solvent}} \\right)^2\\) 
+        with
+
+        * \\(I_m(\\theta)\\) the measured intensity at a certain angle \\(\\theta\\)
+        * \\(R = \\left( \\frac{n_{glass} - n_{air}}{n_{glass}+ n_{air}} \\right)^2 +\\left( \\frac{n_{glass} - n_{solvent}}{n_{glass}+ n_{solvent}} \\right)^2\\)
         * \\( n_{air} = 1.00\\), \\(n_{glass}=\\) `n_glass` , \\(n_{solvent}= \\) `n_m`
 
         Parameters
@@ -125,17 +137,18 @@ class Experiment:
         n_glass : `float`, optional
             Refractive index of the glass, by default 1.49.
         """
-        R = ((n_glass-1.)/(n_glass+1.))**2+((n_glass-n_m)/(n_glass+n_m))**2
+        R = ((n_glass - 1.0) / (n_glass + 1.0)) ** 2 + (
+            (n_glass - n_m) / (n_glass + n_m)
+        ) ** 2
 
-        refl_theta = 180.-self.theta
-        self.reflection_intensity = np.array([
-                self.intensity[self.theta == t][0] 
-                if t in self.theta else 0. 
+        refl_theta = 180.0 - self.theta
+        self.reflection_intensity = np.array(
+            [
+                self.intensity[self.theta == t][0] if t in self.theta else 0.0
                 for t in refl_theta
-            ]) 
+            ]
+        )
         # find intensities of theta=refl_theta, else set to 0.
 
         self.intensity_reflection_uncor = self.intensity
-        self.intensity = self.intensity_reflection_uncor - R*self.reflection_intensity
-
-
+        self.intensity = self.intensity_reflection_uncor - R * self.reflection_intensity

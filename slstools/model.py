@@ -10,7 +10,7 @@ class Model:
     ```python
     import matplotlib.pyplot as plt
     from slstools import Model
-    
+
     # intialise class with spheres of 1200 nm in diameter
     # with a polydispersity of 5%
     model = Model(d=1200.,pd=5.,n_p=1.4345)
