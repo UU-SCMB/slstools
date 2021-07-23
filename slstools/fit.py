@@ -16,6 +16,7 @@ class Fit:
     fit = Fit(experiment, model, model_kwargs=dict(K_unit="nm"))
 
     optimal_model = fit.fit()
+    fit.save() # save parameters in same directory as the experiment
     ```
     """
 

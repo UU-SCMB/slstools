@@ -15,7 +15,7 @@ class Model:
     # with a polydispersity of 5%
     model = Model(d=1200.,pd=5.,n_p=1.4345)
     plt.plot(model.K, model.intensity)
-    plt.xlabel(r"K ($%s^{-1}$)" % exp.K_unit)
+    plt.xlabel(r"K ($%s^{-1}$)" % model.K_unit)
     plt.ylabel("Normalised intensity")
     plt.yscale("log")
     plt.show()
