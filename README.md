@@ -12,14 +12,14 @@ Installation of this package can be done via pip.
 To install the newest version of this package, run the following command:
 
 ```bash
-pip install git+https://github.com/rhoitink/slstools --upgrade
+pip install git+https://github.com/UU-SCMB/slstools --upgrade
 ```
 
 This ensures that the package and its dependencies are installed.
 
 ## Documentation
 
-The documentation can be found at [rhoitink.github.io/slstools](https://rhoitink.github.io/slstools).
+The documentation can be found at [uu-scmb.github.io/slstools](https://uu-scmb.github.io/slstools).
 
 ## Example usage
 
