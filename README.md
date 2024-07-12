@@ -1,6 +1,7 @@
 # SLS python helpers
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10277419.svg)](https://doi.org/10.5281/zenodo.10277419)
 
-Opiniated set of helper functions to handle measurments from SCM's self-built static light scattering (SLS) setup and fit models to it.
+Opiniated set of helper functions to handle measurements from SCM's self-built static light scattering (SLS) setup and fit models to it.
 
 ## Info
 
